@@ -1,0 +1,181 @@
+
+    // sm => sub menu
+    $sm_width             : 250px;
+    $menu_padding         : 30px 25px 30px 20px;
+    $sm_bg                : $color_white;
+    $sm_padding           : 8px 10px;
+    $sm_hover_padding     : 12px 10px 12px 15px;
+    $sm_font_size         : 14px;
+    $sm_hover_font_size   : 16px;
+    $sm_hover_bg_color    : $color_primary;
+    $sm_color             : $color_secondary;
+    $sm_max_no            : 10;
+    $sm_down_arrow        : url( '../svg/down-arrow.svg' );
+    $sm_right_arrow       : url( '../svg/right-arrow.svg' );
+    $sub_class_name       : '.menu-item-has-children';
+    
+    // SITE NAVIGATION
+    #site-navigation {
+
+        // first ul
+        ul.menu {
+            float:right;
+            
+            li{
+                list-style: none;
+                &#{$sub_class_name}:after {
+                    content: $sm_down_arrow;
+                    position: absolute;
+                    right: 5px;
+                    width: 10px;
+                    height: 16px;
+                    top: 50%;
+                    @include translate( 0, -50%);
+                }
+            }
+            
+            > li {
+                position: relative;
+                float:left;
+                
+                > a {
+                    padding: $menu_padding;
+                    display: inline-block;
+                    font-size: 16px;
+                    text-transform: capitalize;
+                    color: $sm_color;
+                }
+                
+                // top line
+                &:before{
+                    content: "";
+                    position: absolute;
+                    top: -2px;
+                    left: 0;
+                    width: 100%;
+                    height: 0;
+                    background-color: $sm_hover_bg_color;
+                }
+                
+                // li hover effect
+                &:hover {
+                    
+                    // line animation
+                    &:before{
+                        height: 6px;
+                        @include transition( height 0.3s linear );
+                    }
+                    
+                    > ul {
+                        visibility: visible;
+                        > li {
+                            opacity: 1;
+                            @include transform( scale( 1, 1 ) translate( 0, 0 ) !important );
+                            @include transition( opacity 0.2s linear, transform 0.4s linear );
+                            
+                            // animation delay
+                            @for $i from 1 through $sm_max_no {
+                                &:nth-child( #{$i} ){
+                                    @if( $i == 1){ $i : 0; }
+                                    $duration : 0.2s + ( $i * 0.05 );
+                                    @include transition-duration( $duration );
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+                
+                // second ul
+                > ul {
+                    position:absolute;
+                    width: $sm_width;
+                    visibility: hidden;
+                    
+                    li{
+                        &#{$sub_class_name}:after {
+                            content: $sm_right_arrow;
+                        }
+                        &:hover{
+                             > a {
+                                 padding: $sm_hover_padding;
+                                background-color:$sm_hover_bg_color;
+                                color: $color_white;
+                                font-size: $sm_hover_font_size;
+                                @include transition( margin 0.2s linear 0.1 all 0.4s linear);
+                            }
+                        }
+                    }
+                    
+                    > li {
+                        position:relative;
+                        opacity: 0;
+                        @include transition( all 0.1s linear );
+                        
+                        // li hover effect
+                        &:hover {
+                           
+                            > ul {
+                                visibility: visible;
+                                li {
+                                    opacity: 1;
+                                    @include transform( scale( 1, 1 ) translate( 0, 0 ) !important );
+                                    @include transition( opacity 0.2s linear, transform 0.4s linear );
+
+                                    // animation delay
+                                    @for $i from 1 through $sm_max_no {
+                                        &:nth-child( #{$i} ){
+                                            @if( $i == 1){ $i : 0; }
+                                            $duration : 0.2s + ( $i * 0.05 );
+                                            @include transition-duration( $duration );
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+                        
+                        a {
+                            padding: $sm_padding;
+                            font-size: $sm_font_size;
+                            display: block;
+                            background-color: $sm_bg;
+                            color: lighten( $sm_color, 10% );
+                            @include transition( all 0.2s linear );
+                        }
+                        
+                        // third ul
+                        ul {
+                            position: absolute;
+                            width: $sm_width;
+                            visibility: hidden;
+                            left: 100%;
+                            top: 0;
+                            
+                            li{
+                                opacity: 0;
+                                // translate
+                                @for $i from 1 through $sm_max_no{
+                                    &:nth-child( #{$i} ){
+                                        $y : 15px * $i;
+                                        @include transform( scale( 0.95, 1 ) translate(0, $y ) );
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // translate
+                        @for $i from 1 through $sm_max_no{
+                            &:nth-child( #{$i} ){
+                                $y : 15px * $i;
+                                @include transform( scale( 0.95, 1 ) translate(0, $y ) );
+                            }
+                        }
+                    }
+                }// second ul
+                
+            }
+        }// .menu ( first ul )
+        
+        
+    }//#site-navigation
